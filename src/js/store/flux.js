@@ -12,7 +12,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					background: "white",
 					initial: "white"
 				}
-			]
+			],
+			home: [{}]
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -20,9 +21,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 				getActions().changeColor(0, "green");
 			},
 			loadSomeData: () => {
-				/**
-					fetch().then().then(data => setStore({ "foo": data.bar }))
-				*/
+				//fetch("https://www.swapi.tech/api/")
+				//.then()
+				//.then(data => setStore({ foo: data.bar }));
+
+				fetch("https://www.swapi.tech/api/", {
+					method: "GET",
+
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						//console.log("respuesta", resp.json());
+						return resp.json();
+					})
+					.then(data => {
+						setStore(data);
+					})
+
+					.catch(err => {
+						console.log("error", err);
+					});
 			},
 			changeColor: (index, color) => {
 				//get the store
