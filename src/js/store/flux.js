@@ -13,7 +13,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					initial: "white"
 				}
 			],
-			home: [{}]
+			home: [],
+			baseURL: "https://www.swapi.tech/api/"
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -37,7 +38,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 						return resp.json();
 					})
 					.then(data => {
-						setStore(data);
+						setStore({ home: Object.entries(data.result) });
+						//console.log(store.home);
 					})
 
 					.catch(err => {
@@ -57,6 +59,29 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				//reset the global store
 				setStore({ demo: demo });
+			},
+			getAllData: value => {
+				const store = getStore();
+				console.log(`${store.baseURL}${value}`);
+				fetch(`${store.baseURL}${value}`, {
+					method: "GET",
+
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						//console.log("respuesta", resp.json());
+						return resp.json();
+					})
+					.then(data => {
+						setStore({ [value]: data.results || data.result });
+						//console.log(store.home);
+					})
+
+					.catch(err => {
+						console.log("error", err);
+					});
 			}
 		}
 	};

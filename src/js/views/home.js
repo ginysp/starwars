@@ -6,17 +6,18 @@ import { Context } from "../store/appContext";
 
 export const Home = () => {
 	const { store, actions } = useContext(Context);
-
+	console.log("store", store);
 	return (
 		<div className="container">
-			{store.demo.map((item, index) => {
+			{store.home.map(([key, value], index) => {
+				console.log(key, value);
 				return (
 					<div key={index} className="text-center mt-5">
-						<h1>Go to planets</h1>
-						<p key={index}>{item.planets}</p>
-						<a href="#" className="btn btn-success">
-							If you see this green button, bootstrap is working
-						</a>
+						<h1>Go to {key}</h1>
+						<p key={index}>{key}</p>
+						<Link to={`/generic/${key}`}>
+							<button className="btn btn-primary">GO {key}</button>
+						</Link>
 					</div>
 				);
 			})}
