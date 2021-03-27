@@ -14,7 +14,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			],
 			home: [],
-			baseURL: "https://www.swapi.tech/api/"
+			baseURL: "https://www.swapi.tech/api/",
+			favorites: []
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -62,7 +63,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			getAllData: value => {
 				const store = getStore();
-				console.log(`${store.baseURL}${value}`);
 				fetch(`${store.baseURL}${value}`, {
 					method: "GET",
 
@@ -82,6 +82,43 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(err => {
 						console.log("error", err);
 					});
+			},
+			getAllDetails: (value, id) => {
+				const store = getStore();
+				fetch(`${store.baseURL}${value}/${id}`, {
+					method: "GET",
+
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						//console.log("respuesta", resp.json());
+						return resp.json();
+					})
+					.then(data => {
+						setStore({ detail: data.results || data.result });
+						//console.log(store);
+					})
+
+					.catch(err => {
+						console.log("error", err);
+					});
+			},
+
+			addFavorite: name => {
+				const store = getStore();
+
+				store.favorites.includes(name)
+					? setStore({ favorites: store.favorites })
+					: setStore({ favorites: store.favorites.concat(name) }); //push no funciona preguntar porq
+				console.log(store.favorites);
+			},
+
+			deleteFavorite: index => {
+				const store = getStore();
+				store.favorites.splice(index, 1);
+				setStore({ favorites: store.favorites });
 			}
 		}
 	};
