@@ -18,25 +18,25 @@ export const Details = () => {
 	const goBack = () => {
 		history.goBack();
 	};
-
-	console.log(store);
+	//let detail = store[value][id];
+	console.log("store ", store);
+	console.log("cga ");
+	console.log("dataresult ", Object.entries(store.details));
 	return (
 		<Container>
 			<Row>
-				{store.detail && store.detail.length > 0 ? (
-					store.detail.map((element, index) => (
-						<Col key={index}>
-							<br />
-							<Card style={{ width: "18rem" }}>
-								<Image src={genericImage} rounded className="card-img-top" />
-								<Card.Body>
-									<Card.Title>{element.properties.director || element.description}</Card.Title>
-								</Card.Body>
-							</Card>
-						</Col>
-					))
+				{store[value] && store[value][id] ? (
+					<Col>
+						<br />
+						<Card style={{ width: "18rem" }}>
+							<Image src={genericImage} rounded className="card-img-top" />
+							<Card.Body>
+								<Card.Title>{store[value][id].properties.director}</Card.Title>
+							</Card.Body>
+						</Card>
+					</Col>
 				) : (
-					<h1>Cargando... </h1>
+					<h1>You must select a value... Go Back :)</h1>
 				)}
 				<br />
 			</Row>

@@ -14,7 +14,7 @@ import vehicles from "../../img/starships.jpg";
 
 export const Home = () => {
 	const { store, actions } = useContext(Context);
-	console.log("store", store);
+	//console.log("store", store);
 	return (
 		<Container>
 			<Carousel>
