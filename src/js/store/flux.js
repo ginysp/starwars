@@ -114,7 +114,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				console.log(store.favorites);
 			},
 
-			deleteFavorite: index => {
+			deleteFavorites: index => {
 				const store = getStore();
 				store.favorites.splice(index, 1);
 				setStore({ favorites: store.favorites });

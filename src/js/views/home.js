@@ -5,12 +5,12 @@ import { Context } from "../store/appContext";
 import { Container, Button, Carousel, Image } from "react-bootstrap";
 
 //PREGUNTAR COMO IMPORTAR LAS IMG DINAMICAS, INVESTIGUE PERO CON REQUIRE NO LO LOGRE PORQ NO COMPILA
-import films from "../../img/movies.png";
+import films from "../../img/films.jpg";
 import people from "../../img/people.jpg";
-import planets from "../../img/planets.png";
-import species from "../../img/species.png";
+import planets from "../../img/planets.jpg";
+import species from "../../img/species.jpg";
 import starships from "../../img/starships.jpg";
-import vehicles from "../../img/starships.jpg";
+import vehicles from "../../img/vehicles.jpg";
 
 export const Home = () => {
 	const { store, actions } = useContext(Context);
@@ -81,7 +81,7 @@ export const Home = () => {
 									case "vehicles":
 										return (
 											<Image
-												src={starships}
+												src={vehicles}
 												rounded
 												alt={key}
 												className="d-block w-100"
