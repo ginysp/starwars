@@ -13,6 +13,11 @@ export const Details = () => {
 
 	useEffect(() => {
 		actions.getAllDetails(value, id);
+
+		actions.getToken();
+		if (!store.login) {
+			history.push("/");
+		}
 	}, []);
 
 	const goBack = () => {

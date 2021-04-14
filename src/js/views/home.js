@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import "../../styles/home.scss";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { Container, Button, Carousel, Image } from "react-bootstrap";
 
@@ -15,6 +15,14 @@ import vehicles from "../../img/vehicles.jpg";
 export const Home = () => {
 	const { store, actions } = useContext(Context);
 	//console.log("store", store);
+	const history = useHistory();
+	useEffect(() => {
+		actions.getToken();
+		if (!store.login) {
+			history.push("/");
+		}
+	}, []);
+
 	return (
 		<Container>
 			<Carousel>

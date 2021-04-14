@@ -14,6 +14,11 @@ export const Generic = () => {
 
 	useEffect(() => {
 		actions.getAllData(value);
+
+		actions.getToken();
+		if (!store.login) {
+			history.push("/");
+		}
 	}, []);
 
 	const goBack = () => {

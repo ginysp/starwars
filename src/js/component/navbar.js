@@ -26,7 +26,7 @@ export const Navbar = () => {
 						store.favorites.map((item, index) => {
 							return (
 								<p className="dropdown-item" key={index}>
-									{item}
+									{item.name}
 									<span onClick={() => actions.deleteFavorites(index)}>
 										<i className="fas fa-trash-alt float-right" />
 									</span>
