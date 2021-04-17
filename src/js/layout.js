@@ -6,10 +6,11 @@ import { Login } from "./views/login.js";
 import { Home } from "./views/home";
 import { Generic } from "./views/generic";
 import { Details } from "./views/details.js";
+import { SignUp } from "./views/signup.js";
 import injectContext, { Context } from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
-import { NavbarTwo } from "./component/navbar2.js";
+import { NavbarTwo } from "./component/navbar2";
 import { Footer } from "./component/footer";
 
 //create your first component
@@ -18,6 +19,7 @@ const Layout = () => {
 	// you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
 	const basename = process.env.BASENAME || "";
 	const { store, actions } = useContext(Context);
+
 	return (
 		<div className="d-flex flex-column">
 			<BrowserRouter basename={basename}>
@@ -26,6 +28,9 @@ const Layout = () => {
 					<Switch>
 						<Route exact path="/">
 							<Login />
+						</Route>
+						<Route exact path="/signup">
+							<SignUp />
 						</Route>
 						<Route exact path="/home">
 							<Home />

@@ -6,7 +6,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 			baseURL: "https://www.swapi.tech/api/",
 			newURL: "https://3000-red-tern-dqzbcae7.ws-us03.gitpod.io",
 			favorites: [],
-			login: false
+			login: false,
+			username: "",
+			register: false
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -97,25 +99,56 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			addFavorite: name => {
 				const store = getStore();
+				// store.favorites.includes(name)
+				// 	? setStore({ favorites: store.favorites })
+				// 	: setStore({ favorites: store.favorites.concat(name) });
+				// console.log("Entre a agregar a Favoritos", store);
 
-				store.favorites.includes(name)
-					? setStore({ favorites: store.favorites })
-					: setStore({ favorites: store.favorites.concat(name) }); //push no funciona preguntar porq
-				console.log(store.favorites);
-			},
-
-			deleteFavorites: index => {
-				const store = getStore();
-				store.favorites.splice(index, 1);
-				setStore({ favorites: store.favorites });
+				let token = localStorage.getItem("token");
+				let data = { username: store.username, value: name };
 				fetch(`${store.newURL}/favorites/`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
 						Authorization: `Bearer	${token}`
 					},
-					body: {
-						name: JSON.stringify(store.favorites[0])
+					body: JSON.stringify(data)
+				}).then(resp => {
+					//console.log("respuesta", resp.json());
+					fetch(`${store.newURL}/favorites/`, {
+						method: "GET",
+						headers: {
+							"Content-Type": "application/json",
+							Authorization: `Bearer	${token}`
+						}
+					})
+						.then(resp => {
+							//console.log("respuesta", resp.json());
+							return resp.json();
+						})
+						.then(data => {
+							setStore({ favorites: data });
+							console.log("dataresult", store);
+						})
+
+						.catch(err => {
+							console.log("error", err);
+						});
+					return resp.json();
+				});
+			},
+
+			deleteFavorites: index => {
+				const store = getStore();
+				const deleteId = store.favorites[index].id;
+				let token = localStorage.getItem("token");
+				store.favorites.splice(index, 1);
+				setStore({ favorites: store.favorites });
+				fetch(`${store.newURL}/favorites/${deleteId}`, {
+					method: "DELETE",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer	${token}`
 					}
 				}).then(resp => {
 					//console.log("respuesta", resp.json());
@@ -128,13 +161,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				let token = localStorage.getItem("token");
 				console.log(token);
 				if (token && token.length > 0) {
-					console.log("entre");
 					setStore({ login: true });
 				} else {
-					console.log("entre al else");
 					setStore({ login: false });
 				}
-				console.log(store.login);
 			},
 			deleteToken: () => {
 				let store = getStore();
@@ -143,7 +173,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				window.location.reload();
 			},
 			getFavorites: () => {
-				console.log("entre a los favorites");
 				const store = getStore();
 				let token = localStorage.getItem("token");
 				fetch(`${store.newURL}/favorites/`, {
@@ -159,7 +188,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					.then(data => {
 						setStore({ favorites: data });
-						console.log("dataresult", store);
 					})
 
 					.catch(err => {
@@ -167,15 +195,47 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 			},
 			loginValidation: (username, password) => {
-				console.log(username, password);
 				const store = getStore();
-				console.log(store.newURL);
+
 				fetch(`${store.newURL}/login`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"
 					},
 					body: JSON.stringify({
+						username: user,
+						password: password
+					})
+				})
+					.then(resp => {
+						//console.log("respuesta", resp.json());
+						return resp.json();
+					})
+					.then(data => {
+						//setStore({ token: data.results || data.result });
+
+						localStorage.setItem("token", data.access_token);
+						setStore({ username: user });
+						console.log(user);
+						window.location.reload();
+					})
+
+					.catch(err => {
+						console.log("error", err);
+					});
+			},
+			registerValidation: (firstname, lastname, email, username, password) => {
+				const store = getStore();
+
+				fetch(`${store.newURL}/register`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({
+						firstname: firstname,
+						lastname: lastname,
+						email: email,
 						username: username,
 						password: password
 					})
@@ -186,9 +246,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					.then(data => {
 						//setStore({ token: data.results || data.result });
-						console.log("dataresult", data);
-						localStorage.setItem("token", data.access_token);
-						window.location.reload();
+
+						setStore({ register: true });
 					})
 
 					.catch(err => {
