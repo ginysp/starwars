@@ -4,7 +4,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			home: [],
 			details: [],
 			baseURL: "https://www.swapi.tech/api/",
-			newURL: "https://3000-red-tern-dqzbcae7.ws-us03.gitpod.io",
+			newURL: "https://3000-moccasin-tick-apqtist7.ws-us03.gitpod.io",
 			favorites: [],
 			login: false,
 			username: "",
@@ -55,7 +55,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			getAllData: value => {
 				const store = getStore();
-				fetch(`${store.baseURL}${value}`, {
+				fetch(`${store.newURL}/${value}`, {
 					method: "GET",
 
 					headers: {
@@ -67,7 +67,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						return resp.json();
 					})
 					.then(data => {
-						setStore({ [value]: data.results || data.result });
+						setStore({ [value]: data });
 						//console.log(store.home);
 					})
 
@@ -194,7 +194,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log("error", err);
 					});
 			},
-			loginValidation: (username, password) => {
+			loginValidation: (user, password) => {
 				const store = getStore();
 
 				fetch(`${store.newURL}/login`, {
